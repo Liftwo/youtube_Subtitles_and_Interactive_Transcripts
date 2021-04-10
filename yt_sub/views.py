@@ -11,7 +11,6 @@ import xml.etree.ElementTree as et
 import re
 import json
 import pandas as pd
-from django.contrib import messages
 
 
 def subtitles_xml(link):
