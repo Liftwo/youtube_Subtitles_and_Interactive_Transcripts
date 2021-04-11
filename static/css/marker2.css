@@ -1,0 +1,12 @@
+.youtube-marker:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.youtube-marker-current {
+  background: mediumpurple;
+}
+
+.cover-sub {
+  color: #eeeeee;
+}
