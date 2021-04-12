@@ -94,6 +94,3 @@ def upload(request, video_id):
     context = {'json_dual': json_dual, 'video_url': video_url, 'sub_dual': sub_dual}
     return render(request, 'test.html', context)
 
-
-def fortest(request):
-    return render(request, 'fortest.html')
