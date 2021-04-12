@@ -4,7 +4,6 @@ from .forms import LinkForm
 from django.urls import reverse
 from urllib.parse import urlencode
 from django.contrib.sessions.models import Session
-# from opencc import OpenCC
 from srt import *
 import requests
 import xml.etree.ElementTree as et
@@ -46,18 +45,6 @@ def subtitles(xml):
     return list_3
 
 
-# def combine_sub(sub_en, sub_ch):
-#     df_en = pd.DataFrame({'start':sub_en[0], 'end':sub_en[1], 'text':sub_en[2]})
-#     df_ch = pd.DataFrame({'start':sub_ch[0], 'end':sub_ch[1], 'text':sub_ch[2]})
-#     df = pd.merge(df_en, df_ch, on='start')
-#     df['text'] = df['text_x']+'<br>'+df['text_y']
-#     df = df.drop(columns=['end_y', 'text_x', 'text_y'], axis=1)
-#     df.columns = ['start', 'end', 'text']
-#     # df_list = [df['start'].tolist(), df['end'].tolist(), df['text'].tolist()]
-#     d = df.to_dict(orient='records')
-#     return d
-
-
 def combine_sub(sub_en, sub_ch):
     df_en = pd.DataFrame({'start':sub_en[0], 'end':sub_en[1], 'text':sub_en[2]})
     df_ch = pd.DataFrame({'start':sub_ch[0], 'end':sub_ch[1], 'text':sub_ch[2]})
@@ -68,34 +55,12 @@ def combine_sub(sub_en, sub_ch):
     d = df.to_dict(orient='records')
     return d
 
-# def srt_file(list_3):
-#     start = []
-#     end = []
-#     c = 1
-#     subs = []
-#     subs_js = []
-#     for i, j,k in zip(list_3[0], list_3[1], list_3[2]):
-#         start.append(timedelta(seconds=i))
-#         end.append(timedelta(seconds=j))
-#         d = {"start":i, "end":j, "text":k}
-#         subs_js.append(d)
-#     for i, j, k in zip(start, end, list_3[2]):
-#         subs.append(Subtitle(index=c, start=i, end=j, content=k))
-#         c += 1
-#
-#     srt = compose(subs)
-#     return srt
-
 
 def main(link):
     en_sub = subtitles(subtitles_xml(link)[1][1])
     ch_sub = subtitles(subtitles_xml(link)[1][0])
 
     return combine_sub(en_sub, ch_sub)
-
-
-if __name__ == "__main__":
-    main()
 
 
 def homepage(request):
@@ -105,11 +70,6 @@ def homepage(request):
             link = request.POST['link']
             video_id = subtitles_xml(link)[0]
             request.session['link'] = link
-            # sub_dual = main(request.POST['link'])
-            # json_dual = json.dumps(sub_dual)
-            # context = {'json_dual': json_dual, 'video_id': video_id}
-
-            # return render(request, 'linkerror.html', context)
 
             return redirect('upload', video_id=video_id)
 
@@ -118,7 +78,7 @@ def homepage(request):
             form = LinkForm()
             context = {'form': form, 'notice': errors_notice}
             return render(request, 'homepage.html', context)
-            # return redirect('/homepage/')
+
 
     form = LinkForm()
     notice = " "
@@ -137,7 +97,3 @@ def upload(request, video_id):
 
 def fortest(request):
     return render(request, 'fortest.html')
-
-
-
-
