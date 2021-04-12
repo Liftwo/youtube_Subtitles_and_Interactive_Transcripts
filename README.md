@@ -5,6 +5,7 @@ Sometimes it is a bit troublesome to switch subtitles in two languages on youtub
 ![image](https://github.com/Liftwo/youtube_subtitles_and_interactive_transcripts/blob/master/github.gif)
 
 And of course you need to upload the youtube video link on this page first.
+
 ![image](https://github.com/Liftwo/youtube_subtitles_and_interactive_transcripts/blob/master/example2.jpg)
 
 
