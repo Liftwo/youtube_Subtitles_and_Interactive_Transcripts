@@ -92,5 +92,5 @@ def upload(request, video_id):
     json_dual = json.dumps(sub_dual)
     video_url = "https://www.youtube.com/embed/" + video_id
     context = {'json_dual': json_dual, 'video_url': video_url, 'sub_dual': sub_dual}
-    return render(request, 'test.html', context)
+    return render(request, 'result.html', context)
 
