@@ -7,49 +7,50 @@
     <br>
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-10">
-            <iframe id="player" src={{ video_url }} width="100%" height="500" frameborder="0"></iframe>
+        <div class="col-10" align="center">
+            <div id="player"></div>
             <link rel="stylesheet" type="text/css" href="{% static 'css/marker2.css' %}">
-            <div class="youtube-transcript">
-                <div id="youtube-transcript-#1" class="youtube-transcript" style="text-align:center">
-                    <span class="youtube-marker" id="sub-en">Ready~</span><br>
-                    <span id="sub-ch">Ready~</span>
-                    <script>
-                        var subtitles = {{ json_dual|safe }};
+            <div id="youtube-transcript-#1" class="youtube-transcript">
+                <span class="youtube-marker" id="sub-en">Ready~</span><br>
+                <span id="sub-ch">Ready~</span>
+                <script>
+                    var subtitles = {{ json_dual|safe }};
+                    var tag = document.createElement('script');
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    var firstScriptTag = document.getElementsByTagName('script')[0];
+                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-                        var tag = document.createElement('script');
-                        tag.src = "https://www.youtube.com/iframe_api";
-                        var firstScriptTag = document.getElementsByTagName('script')[0];
-                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                        var player;
+                    var player;
 
-                        function onYouTubeIframeAPIReady() {
-                          player = new YT.Player('player', {
-                            events: {
-                              'onReady': onPlayerReady,
-                              'onStateChange': onPlayerStateChange
-                            }
-                          });
-                        }
+                    function onYouTubeIframeAPIReady() {
+                            player = new YT.Player('player', {
+                              height: '360',
+                              width: '840',
+                              videoId: 'HMJiX77z4AU/',
+                              events: {
+                                'onReady': onPlayerReady,
+                                'onStateChange': onPlayerStateChange
+                              }
+                            });
+                          }
 
-                        function onPlayerReady(event) {
-                            event.target.mute().playVideo();
-                          };
+                    function onPlayerReady(event) {
+                        event.target.mute().playVideo();
+                      }
 
-                        function onPlayerStateChange(event) {
-                          var Update;
-                          if (event.data == YT.PlayerState.PLAYING) {
-                            Update = setInterval(function() {
-                              ShowSubtitles()
-                            }, 100);
-                          } else {
-                            clearInterval(Update);
-                          };
-                          console.log(event.data)
-                        };
+                    function onPlayerStateChange(event) {
+                      var Update;
+                      if (event.data == YT.PlayerState.PLAYING) {
+                        Update = setInterval(function() {
+                          ShowSubtitles()
+                        }, 100);
+                      } else {
+                        clearInterval(Update);
+                      };
+                      console.log(event.data)
+                    }
 
-
-                        function ShowSubtitles() {
+                    function ShowSubtitles() {
                           var current_time = player.getCurrentTime();
                           console.log(current_time);
                           subtitles.forEach(function(subtitle, i) {
@@ -61,7 +62,7 @@
                           });
                         };
 
-                        $(document).ready(function() {
+                    $(document).ready(function() {
                             $("#sub-en").mouseenter(function () {
                             $("#sub-en").css({"background":"gray", "color":"gray"});
                             })
@@ -69,8 +70,10 @@
                             $("#sub-en").css({"background":"", "color":""});
                             })
                         });
-                    </script>
-                </div>
+
+                    $("#player").css("text-align", "center");
+
+                </script>
             </div>
         </div>
         <div class="col-1"></div>
