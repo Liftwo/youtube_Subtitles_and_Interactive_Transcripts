@@ -21,12 +21,12 @@
                     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
                     var player;
-
+                    var video_id = `{{ video_id }}`;
                     function onYouTubeIframeAPIReady() {
                             player = new YT.Player('player', {
                               height: '360',
                               width: '840',
-                              videoId: 'HMJiX77z4AU/',
+                              videoId: video_id,
                               events: {
                                 'onReady': onPlayerReady,
                                 'onStateChange': onPlayerStateChange

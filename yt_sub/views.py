@@ -86,11 +86,15 @@ def homepage(request):
     return render(request, 'homepage.html', context)
 
 
+def quote(string):
+    return "'{}'".format(string)
+
+
 def upload(request, video_id):
     link = request.session.get('link')
     sub_dual = main(link)
     json_dual = json.dumps(sub_dual)
-    video_url = "https://www.youtube.com/embed/" + video_id
-    context = {'json_dual': json_dual, 'video_url': video_url, 'sub_dual': sub_dual}
+    video_id = video_id
+    context = {'json_dual': json_dual, 'sub_dual': sub_dual, 'video_id': video_id}
     return render(request, 'result.html', context)
 
