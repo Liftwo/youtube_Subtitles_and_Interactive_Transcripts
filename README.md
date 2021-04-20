@@ -1,4 +1,4 @@
-## Youtube dual subtitles and interactive transcripts
+## Youtube Dual Subtitles and Interactive Transcripts
 ## Youtube 互動式雙語字幕
 
 This application built using Django and the idea of this app is to help you learn English.
