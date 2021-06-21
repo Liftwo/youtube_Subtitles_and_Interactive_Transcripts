@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
+{% block title %}
+    {{ video_title }}
+{% endblock title %}
 {% block content %}
 {% load static %}
 {% load custom_tags %}
 
+
 <div class="container">
     <br>
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-1"></div>
         <div class="col-10" align="center">
             <div id="player"></div>
             <link rel="stylesheet" type="text/css" href="{% static 'css/marker2.css' %}">
             <div id="youtube-transcript-#1" class="youtube-transcript">
-                <span class="youtube-marker" id="sub-en">Ready~</span><br>
+                <span class="youtube-marker" id="sub-en" style="background-color:gray;color:gray">Ready~</span><br>
                 <span id="sub-ch">Ready~</span>
                 <script>
+                    alert("雙字幕同步率為{{ rate }}");
                     var subtitles = {{ json_dual|safe }};
+                    function UnescapeHTML(a) {
+                        a = "" + a;
+                        return a.replace(/&#39;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+                    }
+
                     var tag = document.createElement('script');
                     tag.src = "https://www.youtube.com/iframe_api";
                     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -29,7 +39,7 @@
                               videoId: video_id,
                               events: {
                                 'onReady': onPlayerReady,
-                                'onStateChange': onPlayerStateChange
+                                'onStateChange': onPlayerStateChange,
                               }
                             });
                           }
@@ -56,18 +66,22 @@
                           subtitles.forEach(function(subtitle, i) {
 
                             if (current_time >= subtitle.start && current_time <= subtitle.end) {
-                              document.getElementById("sub-ch").textContent=subtitle.text_ch;
-                              document.getElementById("sub-en").textContent=subtitle.text_en;
+                              document.getElementById("sub-ch").textContent=UnescapeHTML(subtitle.text_ch);
+                              document.getElementById("sub-en").textContent=UnescapeHTML(subtitle.text_en);
                             }
                           });
                         };
 
-                    $(document).ready(function() {
+                    $("span").text()
+
+                    $(document).ready(function(event) {
                             $("#sub-en").mouseenter(function () {
-                            $("#sub-en").css({"background":"gray", "color":"gray"});
+                            $("#sub-en").css({"background":"", "color":""});
+                            player.pauseVideo();
                             })
                             $("#sub-en").mouseleave(function() {
-                            $("#sub-en").css({"background":"", "color":""});
+                            $("#sub-en").css({"background":"gray", "color":"gray"});
+                            player.playVideo();
                             })
                         });
 
@@ -78,9 +92,12 @@
         </div>
         <div class="col-1"></div>
     </div>
-    <div class="row mx-auto" style="width:100px;">
-        <a href="/homepage/"><button class="btn btn-light" type="button">來看看別的影片~<i class="fas fa-plane"></i></button></a>
+
+    <div class="text-center">
+        <a href="/"><button class="btn btn-light" type="button" style="font-family:'Chakra Petch', sans-serif" >Another Video~<i class="fas fa-plane"></i></button></a>
     </div>
+
+
 </div>
 
 {% endblock %}

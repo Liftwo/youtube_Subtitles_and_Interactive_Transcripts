@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap');
+
+
+.navbar-custom {
+    background-color: #eeeeee;
+}
+
+/* Modify brand and text color */
+.nav-link, .navbar-brand {
+	color: black;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 28px;
+
+}
+
+body {
+    background: #ffc0cb
+            /*radial-gradient(circle farthest-corner at left, pink, lightpink);*/
+    /*height: 100%;*/
+    /*margin: 0;*/
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    background-color: #eeeeee;
+    width: 100%;
+    text-align: center;
+    height: 35px;
+    font-family: 'Chakra Petch', sans-serif;
+    /*overflow-y: scroll;*/
+}
+
+/*.footer {*/
+/*    border-top: 0.1rem #e6e6e6 solid;*/
+/*    padding: 3rem 0;*/
+/*    background-color: #eeeeee;*/
+/*    font-family: 'Chakra Petch', sans-serif;*/
+/*}*/
+
+.text-right {
+    float: right !important;
+    margin-right: 2rem;
+}
+
+
+/*.navbar-brand {*/
+/*    font-family: 'Chakra Petch', sans-serif;*/
+/*    font-size: 28px;*/
+
+/*}*/
+
+/*.nav-link {*/
+/*    font-family: 'Chakra Petch', sans-serif;*/
+/*    font-size: 28px;*/
+
+/*}*/
+
+#like_tag:focus {
+    cursor: pointer;
+    outline: 0;
+    border-style: none;
+}
+
+button:focus{
+    outline: none
+}
+
+

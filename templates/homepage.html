@@ -1,34 +1,55 @@
 {% extends 'base.html' %}
+{% block title %}
+    Like...
+{% endblock title %}
 {% block content %}
+{% load static %}
 
-<div class="container">
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-2" ></div>
-        <div class="col-8 bg-light border">
-            <div class="text-center">
-                {{ notice }}
-                <form method="POST">
-                {% csrf_token %}
-                <label for="link">Link:</label>
-                <input class="form-control input-lg" id="link" type="url" name="link" required>
-                <br>
-                <button type="submit">送出</button>
-                </form>
+<script>
+    $("#tags").autocomplete({
+        minLength:10
+    });
+</script>
+
+<div class="wrapper">
+    <div class="form-body mt-5">
+           <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-8">
+                    <div class="form-content">
+                        <div class="form-items">
+                            <h3>Youtube Today</h3>
+                            <p>Fill in the link below.</p>
+                            <form method="POST">
+                            {% csrf_token %}
+                                <div class="col-md-12">
+                                   <input id="tags" class="form-control" type="text" name="link" placeholder="Link"  autocomplete="on">
+                                   <div class="valid-feedback">Username field is valid!</div>
+                                   <div class="invalid-feedback">Username field cannot be blank!</div>
+                                </div>
+
+                               <div class="col-md-12 mt-3">
+                                <p><i class="fas fa-flag-checkered"></i>&nbsp僅限Youtube有中文及英文雙字幕。</p>
+                               </div>
+
+
+                                <div class="form-button mt-3">
+                                    <button name="send_url" type="submit" class="btn btn-primary">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-2">                     </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-9">
-           <i class="fas fa-flag-checkered"></i>&nbsp<p>僅限Youtube有中文及英文雙字幕。</p>
-            <p>Youtube連結格式必須為：https://www.youtube.com/watch?v=HMJiX77z4AU&t=851s&ab_channel=ITZY</p>
-        </div>
-        <div class="col-1"></div>
-    </div>
-</div>
 
+    <footer class="footer py-1">
+        <span>© 2021 like.com </span>
+        <div class="text-right">
+            <i class="far fa-chart-bar" ></i> <span>{{ visitor }}</span>
+            <i class="far fa-heart" ></i> <span class="like_total" id="like_total">{{ like_count }}</span>
+        </div>
+    </footer>
+
+</div>
 {% endblock %}
+

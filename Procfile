@@ -1,0 +1,1 @@
+web: gunicorn yt_sub.wsgi --log-file -

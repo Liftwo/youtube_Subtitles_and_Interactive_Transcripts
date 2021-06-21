@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}
+    My collect...
+{% endblock title %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/collect.css' %}">
+
+
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="table-inside" align="center" style="width:50%;">
+                        <tr align="center">
+                            <td>
+                                <img src="{% static "img/pl.jpeg" %}"/>
+                                    <p>itzy</p>
+                            </td>
+                            <td>
+                                <img src="{% static "img/gf.jpeg" %}"/>
+                                    <p>itzy</p>
+                            </td>
+                            <td>
+                                <img src="{% static "img/fromis.jpeg" %}"/>
+                                    <p>itzy</p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+{#<a href="/" target="_self">#}
+{#    <img src="{% static "img/itzy_thumbnail_640X480.jpg" %}" style="max-width:100%;" alt="Photo of Onetahuti Beach in NZ">#}
+{#</a>#}
+{% endblock %}

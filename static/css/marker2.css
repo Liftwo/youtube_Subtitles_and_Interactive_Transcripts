@@ -10,3 +10,13 @@
 .cover-sub {
   color: #eeeeee;
 }
+
+.iframe {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.center {
+  display: table-cell;
+  vertical-align: middle;
+}

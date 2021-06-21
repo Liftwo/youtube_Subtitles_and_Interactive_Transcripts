@@ -1,0 +1,9 @@
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT yt_sub.wsgi
+
+beta_settings:
+    cloud_sql_instances: ytsub-312415:asia-east1:ytsub-db
+
+runtime_config:
+  python_version: 3

@@ -26,7 +26,7 @@ SECRET_KEY = 'gs*z1@07t9ri)r11v54z#y5xi-2(tmkc&4&z!t0=g58cji(c*9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'visit',
 ]
 
 MIDDLEWARE = [
@@ -78,12 +79,25 @@ WSGI_APPLICATION = 'yt_sub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
+# if os.getenv('GAE_INSTANCE', None):
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'HOST': '/cloudsql/ytsub-312415:asia-east1:ytsub-db',
+        'NAME': 'ytsub',
+        'USER': 'postgres',
+        'PASSWORD': 'tyla910ai', #修改為您的密碼
+        'PORT': '5432',
     }
 }
+
+DATABASES['default']['HOST'] = '/cloudsql/ytsub-312415:asia-east1:ytsub-db'
+if os.getenv('GAE_INSTANCE'):
+    pass
+else:
+    DATABASES['default']['HOST'] = '127.0.0.1'
+
 
 
 # Password validation
@@ -122,5 +136,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = 'https://storage.googleapis.com/ytsub/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
+STATIC_URL = '/static/'

@@ -1,0 +1,9 @@
+.vscode
+*.pyc
+__pycache__
+Include
+Lib
+Scripts
+tcl
+db.sqlite3
+staticfiles
