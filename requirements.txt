@@ -2,8 +2,12 @@ asgiref==3.3.1
 certifi==2020.12.5
 chardet==4.0.0
 DateTime==4.3
+dj-database-url==0.5.0
+dj-static==0.0.6
 Django==3.1.7
+gunicorn==20.1.0
 idna==2.10
+numpy==1.20.1
 OpenCC==1.1.1
 pandas==1.1.5
 psycopg2==2.8.6
@@ -14,6 +18,7 @@ requests==2.25.1
 six==1.15.0
 sqlparse==0.4.1
 srt==3.4.1
+static3==0.7.0
 urllib3==1.26.3
+youtube-transcript-api==0.4.1
 zope.interface==5.2.0
-gunicorn==20.1.0
