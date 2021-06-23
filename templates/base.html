@@ -48,6 +48,7 @@
                 $.ajax({
                     type:"POST",
                     data:{likes:likes},
+                    headers: { "X-CSRFToken": '{{csrf_token}}' },
                 });
                     })
             });

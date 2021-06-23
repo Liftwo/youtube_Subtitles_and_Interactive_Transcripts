@@ -88,7 +88,6 @@ def visitor_count(request):
     return visit_model.times
 
 
-@csrf_exempt
 def like_count(request):
     print(request.POST)
     likes = Like.objects.get(pk=1)
@@ -103,7 +102,7 @@ def like_count(request):
         likes_total = likes.like_times
     return likes_total
 
-@csrf_exempt
+
 def homepage(request):
     if "send_url" in request.POST:
         form = LinkForm(request.POST)
