@@ -9,21 +9,43 @@ from django.views.decorators.csrf import csrf_exempt
 from visit.models import Visit, Like
 
 
-def subtitles_xml(link):
+def lang_list(link):
     yt_url = link  # "https://www.youtube.com/watch?v=HMJiX77z4AU&t=851s&ab_channel=ITZY"
-    # url_get_1 = yt_url.split("&")
-    # url_get_2 = url_get_1[0].split("=")
-    # video_id = url_get_2[1]
     match = re.search(r"youtube\.com/.*v=([^&]*)", yt_url)
     if match:
         video_id = match.group(1)
     else:
         video_id = ""
+    lang_list_url = f"https://video.google.com/timedtext?type=list&v={video_id}"
+    all_lang_code = []
+    r = requests.get(lang_list_url)
+    lang_list_xml = et.fromstring(r.content)
+    for elem in lang_list_xml:
+        all_lang_code.append(elem.attrib['lang_code'])
+    all_lang_code.extend([video_id])
+
+    return all_lang_code    # id在list的最後
+
+
+def subtitles_xml(link):
+    lang_code_list = lang_list(link)
+    video_id = lang_code_list[-1]
+    all_zh_sub = [i for i in lang_code_list if "zh" in i]
+    zh_sub_order = ["zh-TW", "zh-HK", "zh-Hans", "zh", "zh-CN"]
+    zh_sub = ""
+    for i in range(0, 4):
+        if zh_sub_order[i] in all_zh_sub:
+            zh_sub = zh_sub_order[i]
+            break
+        else:
+            continue
+
     subtitles_url = []
-    subtitles_url.extend([f"http://www.youtube.com/api/timedtext?v={video_id}&lang=zh-TW", f"http://www.youtube.com/api/timedtext?v={video_id}&lang=zh-Hans", f"http://www.youtube.com/api/timedtext?v={video_id}&lang=zh",f"http://www.youtube.com/api/timedtext?v={video_id}&lang=en"])
+    subtitles_url.extend([f"http://www.youtube.com/api/timedtext?v={video_id}&lang={zh_sub}", f"http://www.youtube.com/api/timedtext?v={video_id}&lang=en"])
+
     id_and_url = [video_id]
     id_and_url.append(subtitles_url)
-    return id_and_url
+    return id_and_url  # id在前
 
 
 def subtitles(xml):
@@ -61,17 +83,17 @@ def combine_sub(sub_en, sub_ch):
 
 
 def main(link):
-    zh_TW_sub = subtitles(subtitles_xml(link)[1][0]) #台灣繁體
-    en_sub = subtitles(subtitles_xml(link)[1][3])
-    hans_sub = subtitles(subtitles_xml(link)[1][1]) #zh-Hans
-    zh_sub = subtitles(subtitles_xml(link)[1][2]) #zh
-    if zh_TW_sub != 'nothing':
-        ch_sub = zh_TW_sub
-    elif hans_sub != 'nothing':
-        ch_sub = hans_sub
-    else:
-        ch_sub = zh_sub
-    return combine_sub(en_sub, ch_sub)
+    zh_sub = subtitles(subtitles_xml(link)[1][0])
+    en_sub = subtitles(subtitles_xml(link)[1][1])
+    # hans_sub = subtitles(subtitles_xml(link)[1][1]) #zh-Hans
+    # zh_sub = subtitles(subtitles_xml(link)[1][2]) #zh
+    # if zh_TW_sub != 'nothing':
+    #     ch_sub = zh_TW_sub
+    # elif hans_sub != 'nothing':
+    #     ch_sub = hans_sub
+    # else:
+    #     ch_sub = zh_sub
+    return combine_sub(en_sub, zh_sub)
 
 
 def visitor_count(request):
@@ -141,7 +163,7 @@ def video_title(video_id):
 
 def upload(request, video_id):
     link = request.session.get('link')
-    r = requests.get(subtitles_xml(link)[1][3]) #en
+    r = requests.get(subtitles_xml(link)[1][1]) #en
     yt_video_id = subtitles_xml(link)[0]
     if "Error 404" in str(r.content) or yt_video_id == "" or str(r.content) == "b''": #代表影片遭刪除
         # reason = []
