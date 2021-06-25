@@ -33,7 +33,7 @@ def subtitles_xml(link):
     all_zh_sub = [i for i in lang_code_list if "zh" in i]
     zh_sub_order = ["zh-TW", "zh-HK", "zh-Hans", "zh", "zh-CN"]
     zh_sub = ""
-    for i in range(0, 4):
+    for i in range(0, 5):
         if zh_sub_order[i] in all_zh_sub:
             zh_sub = zh_sub_order[i]
             break
@@ -45,7 +45,7 @@ def subtitles_xml(link):
 
     id_and_url = [video_id]
     id_and_url.append(subtitles_url)
-    return id_and_url  # id在前
+    return id_and_url, lang_code_list  # id在前
 
 
 def subtitles(xml):
@@ -55,18 +55,18 @@ def subtitles(xml):
     sub = []
 
     r = requests.get(xml)
-    if (str(r.content) == "b''") or (str(r.content) == ""):
-        list_3 = 'nothing'
-    else:
-        video_xml = et.fromstring(r.content)
-        for elem in video_xml:  # loop all lines
-            start.append(float(elem.attrib['start']))
-            dur.append(float(elem.attrib['dur']))
-            sub.append(elem.text.replace('\n', ' '))
+    # if (str(r.content) == "b''") or (str(r.content) == ""):
+    #     list_3 = 'nothing'
+    # else:
+    video_xml = et.fromstring(r.content)
+    for elem in video_xml:  # loop all lines
+        start.append(float(elem.attrib['start']))
+        dur.append(float(elem.attrib['dur']))
+        sub.append(elem.text.replace('\n', ' '))
 
-        for i, j in zip(start, dur):
-            end.append(i + j)
-        list_3 = [start, end, sub]
+    for i, j in zip(start, dur):
+        end.append(i + j)
+    list_3 = [start, end, sub]
 
     return list_3
 
@@ -83,8 +83,8 @@ def combine_sub(sub_en, sub_ch):
 
 
 def main(link):
-    zh_sub = subtitles(subtitles_xml(link)[1][0])
-    en_sub = subtitles(subtitles_xml(link)[1][1])
+    zh_sub = subtitles(subtitles_xml(link)[0][1][0])
+    en_sub = subtitles(subtitles_xml(link)[0][1][1])
     # hans_sub = subtitles(subtitles_xml(link)[1][1]) #zh-Hans
     # zh_sub = subtitles(subtitles_xml(link)[1][2]) #zh
     # if zh_TW_sub != 'nothing':
@@ -130,7 +130,7 @@ def homepage(request):
         form = LinkForm(request.POST)
         if form.is_valid():
             link = request.POST['link']
-            video_id = subtitles_xml(link)[0]
+            video_id = subtitles_xml(link)[0][0]
             request.session['link'] = link
 
             return redirect('upload', video_id=video_id)
@@ -163,28 +163,26 @@ def video_title(video_id):
 
 def upload(request, video_id):
     link = request.session.get('link')
-    r = requests.get(subtitles_xml(link)[1][1]) #en
-    yt_video_id = subtitles_xml(link)[0]
-    if "Error 404" in str(r.content) or yt_video_id == "" or str(r.content) == "b''": #代表影片遭刪除
-        # reason = []
-        # if "Error 404" in str(r.content):
-        #     reason.append("404")
-        # elif yt_video_id == "":
-        #     reason.append("no id")
-        # elif str(r.content) == "b''":
-        #     reason.append('bb')
-        # else:
-        #     reason.append('else')
-        # context={"reason":reason}
+    r = requests.get(subtitles_xml(link)[0][1][1]) #en
+    yt_video_id = subtitles_xml(link)[0][0]
+    code_list = subtitles_xml(link)[1]
+    if "Error 404" in str(r.content) or yt_video_id == "": #代表影片遭刪除
+        return render(request, 'linkerror.html')
+    elif "en" not in code_list:
         return render(request, 'linkerror.html')
     else:
-        sub_dual = main(link)
-        json_dual = json.dumps(sub_dual[1])
-        rate = '%d%%' % int(sub_dual[0]*100)
-        video_id = video_id
-        title = video_title(video_id)
-        context = {'json_dual': json_dual, 'video_id': video_id, 'rate': rate, 'video_title': title}
-        return render(request, 'result.html', context)
+        match_string = "^.*zh.*$"
+        match_result = re.match(match_string, ''.join(code_list))
+        if not match_result:
+            return render(request, 'linkerror.html')
+        else:
+            sub_dual = main(link)
+            json_dual = json.dumps(sub_dual[1])
+            rate = '%d%%' % int(sub_dual[0]*100)
+            video_id = video_id
+            title = video_title(video_id)
+            context = {'json_dual': json_dual, 'video_id': video_id, 'rate': rate, 'video_title': title}
+            return render(request, 'result.html', context)
 
 
 def about(request):
