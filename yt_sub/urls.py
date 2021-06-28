@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from .views import YTSitemap
+from django.contrib.sitemaps.views import sitemap, index
+
+# sitemaps = {
+#     'ytsub': YTSitemap,
+# }
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
@@ -25,5 +31,6 @@ urlpatterns = [
     path('about/', views.about),
     path('collect/', views.collect),
     path('test/', views.test),
+    path('sitemap.xml'),
 
 ]
