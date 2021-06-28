@@ -16,21 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from .views import YTSitemap
-from django.contrib.sitemaps.views import sitemap, index
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import StaticViewSitemap
 
-# sitemaps = {
-#     'ytsub': YTSitemap,
-# }
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('admin/', admin.site.urls),
     # path('homepage/', views.homepage, name='homepage'),
     path('upload/<video_id>/', views.upload, name='upload'),
-    path('about/', views.about),
-    path('collect/', views.collect),
+    path('about/', views.about, name='about'),
+    path('collect/', views.collect, name='collect'),
     path('test/', views.test),
-    path('sitemap.xml'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
 ]
