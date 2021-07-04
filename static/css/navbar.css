@@ -14,10 +14,12 @@
 }
 
 body {
-    background: #ffc0cb
+    background: #ffc0cb;
             /*radial-gradient(circle farthest-corner at left, pink, lightpink);*/
     /*height: 100%;*/
     /*margin: 0;*/
+    overflow: auto;
+
 }
 
 .footer {
