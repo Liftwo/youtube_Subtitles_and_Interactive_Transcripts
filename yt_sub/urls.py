@@ -31,8 +31,10 @@ urlpatterns = [
     path('upload/<video_id>/', views.upload, name='upload'),
     path('about/', views.about, name='about'),
     path('collect/', views.collect, name='collect'),
-    path('test/', views.test),
+    # path('test/', views.test),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('<int:pk>', views.single_collect),
+    # path('test', views.single_collect),
     # path('sitemap.xml', views.index, {'sitemaps':sitemaps, 'template_name':'custom_sitemap.html'}),
 
 ]

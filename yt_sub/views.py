@@ -6,7 +6,7 @@ import re
 import json
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
-from visit.models import Visit, Like
+from visit.models import Visit, Like, Collect
 
 
 def lang_list(link):
@@ -130,15 +130,12 @@ def homepage(request):
         form = LinkForm(request.POST)
         if form.is_valid():
             link = request.POST['link']
-            video_id = subtitles_xml(link)[0][0]
-            request.session['link'] = link
-
-            return redirect('upload', video_id=video_id)
-
-    # elif "like" in request.POST:
-    #     likes.like_times += 1
-    #     likes.save()
-    #     return redirect('homepage')
+            try:
+                video_id = subtitles_xml(link)[0][0]
+                request.session['link'] = link
+                return redirect('upload', video_id=video_id)
+            except:
+                return render(request, 'linkerror.html')
 
     form = LinkForm()
     visitor = visitor_count(request)
@@ -197,6 +194,12 @@ def collect(request):
     visitor = visitor_count(request)
     context = {'visitor': visitor, 'like_count': likes_total}
     return render(request, 'collect_2.html', context)
+
+
+def single_collect(request, pk):
+    video_collect = Collect.objects.get(id=pk)
+
+    return render(request, 'single_collect.html', locals())
 
 
 def test(request):
