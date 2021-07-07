@@ -12,9 +12,9 @@
 </script>
 
 <div class="wrapper">
-    <div class="form-body mt-5">
+    <div class="form-body mt-5 mr-1 ml-5">
            <div class="row d-flex justify-content-center align-items-center">
-                <div class="col-8">
+                <div class="col-12 col-md-8 ">
                     <div class="form-content">
                         <div class="form-items">
                             <h3>Youtube中英雙字幕</h3>
@@ -41,13 +41,16 @@
             </div>
     </div>
 
+
     <footer class="footer py-1">
-        <span>© 2021 like.com </span>
-        <div class="text-right">
-            <i class="far fa-chart-bar" ></i> <span>{{ visitor }}</span>
-            <i class="far fa-heart" ></i> <span class="like_total" id="like_total">{{ like_count }}</span>
-        </div>
+    <span>© 2021 like.com </span>
+    <div class="text-right">
+        <i class="far fa-chart-bar" ></i> <span>{{ visitor }}</span>
+        <i class="far fa-heart" ></i> <span class="like_total" id="like_total">{{ like_count }}</span>
+    </div>
     </footer>
+
+
 
 </div>
 {% endblock %}

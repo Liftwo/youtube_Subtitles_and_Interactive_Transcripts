@@ -18,7 +18,8 @@ body {
             /*radial-gradient(circle farthest-corner at left, pink, lightpink);*/
     /*height: 100%;*/
     /*margin: 0;*/
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
 }
 
