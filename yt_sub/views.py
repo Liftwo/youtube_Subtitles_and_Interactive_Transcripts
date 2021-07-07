@@ -178,7 +178,9 @@ def upload(request, video_id):
             rate = '%d%%' % int(sub_dual[0]*100)
             video_id = video_id
             title = video_title(video_id)
-            context = {'json_dual': json_dual, 'video_id': video_id, 'rate': rate, 'video_title': title}
+            likes_total = like_count(request)
+            visitor = visitor_count(request)
+            context = {'json_dual': json_dual, 'video_id': video_id, 'rate': rate, 'video_title': title, 'visitor': visitor, 'like_count': likes_total}
             return render(request, 'result.html', context)
 
 
@@ -198,11 +200,17 @@ def collect(request):
 
 def single_collect(request, pk):
     video_collect = Collect.objects.get(id=pk)
+    likes_total = like_count(request)
+    visitor = visitor_count(request)
 
     return render(request, 'single_collect.html', locals())
 
 
 def test(request):
-    return render(request, 'test.html')
+    return render(request, 'test3.html')
+
+
+def test_2(request):
+    return render(request, 'test2.html')
 
 

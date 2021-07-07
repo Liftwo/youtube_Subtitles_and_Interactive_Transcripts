@@ -16,7 +16,7 @@
             <link rel="stylesheet" type="text/css" href="{% static 'css/marker2.css' %}">
             <div id="youtube-transcript-#1" class="youtube-transcript">
                 <span class="youtube-marker" id="sub-en" style="background-color:gray;color:gray">Ready~</span><br>
-                <span id="sub-ch">Ready~</span>
+                <span id="sub-ch">Ready~</span><br>
                 <script>
                     alert("雙字幕同步率為{{ rate }}");
                     var subtitles = {{ json_dual|safe }};
@@ -68,6 +68,7 @@
                             if (current_time >= subtitle.start && current_time <= subtitle.end) {
                               document.getElementById("sub-ch").textContent=UnescapeHTML(subtitle.text_ch);
                               document.getElementById("sub-en").textContent=UnescapeHTML(subtitle.text_en);
+                              document.getElementById("sub-test").textContent=subtitle.start;
                             }
                           });
                         };
@@ -87,6 +88,10 @@
 
                     $("#player").css("text-align", "center");
 
+                    function ShowJson_dual(){
+                        document.getElementById("sub-test").textContent=subtitles;
+                    }
+
                 </script>
             </div>
         </div>
@@ -96,8 +101,18 @@
     <div class="text-center">
         <a href="/"><button class="btn btn-light" type="button" style="font-family:'Chakra Petch', sans-serif" >Another Video~<i class="fas fa-plane"></i></button></a>
     </div>
+</div>
 
+<div>
+    <div style="height: 60px;"></div>
 
+    <footer class="footer py-1">
+    <span>© 2021 like.com </span>
+    <div class="text-right">
+        <i class="far fa-chart-bar" ></i> <span>{{ visitor }}</span>
+        <i class="far fa-heart" ></i> <span class="like_total" id="like_total">{{ like_count }}</span>
+    </div>
+    </footer>
 </div>
 
 {% endblock %}
