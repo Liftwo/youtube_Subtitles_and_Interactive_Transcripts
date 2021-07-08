@@ -69,4 +69,21 @@ button:focus{
     outline: none
 }
 
+.vbox {
+    position: relative;
+    padding-top: 53%;
+}
+
+.vbox iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 91%;
+}
+
+.youtube-transcript{
+    text-align: center;
+
+}
 
