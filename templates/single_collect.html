@@ -18,7 +18,7 @@
             <div class="col-md-1"></div>
         </div>
 
-        <div id="youtube-transcript-#1" class="youtube-transcript">
+        <div id="youtube-transcript-#1" class="youtube-transcript mt-3">
             <span class="youtube-marker" id="sub-en" style="background-color:gray;color:gray">Ready~</span><br>
             <span id="sub-ch">Ready~</span>
             <script>
@@ -38,8 +38,8 @@
                 var video_id = `{{ video_collect.video_id }}`;
                   function onYouTubeIframeAPIReady() {
                     player = new YT.Player('player', {
-                      height: '390',
-                      width: '640',
+                      height: '360',
+                      width: '840',
                       videoId: video_id,
                       playerVars: {
                         'playsinline': 1
@@ -98,7 +98,7 @@
             </script>
         </div>
 
-        <div class="text-center">
+        <div class="text-center mt-1">
             <a href="/"><button class="btn btn-light" type="button" style="font-family:'Chakra Petch', sans-serif" >Another Video~<i class="fas fa-plane"></i></button></a>
         </div>
 
