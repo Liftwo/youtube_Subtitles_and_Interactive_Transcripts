@@ -69,10 +69,20 @@ button:focus{
     outline: none
 }
 
-.vbox {
+@media(min-width: 576px)  {
+    .vbox {
     position: relative;
     padding-top: 83%;
+    }
 }
+
+@media(min-width: 768px)  {
+    .vbox {
+    position: relative;
+    padding-top: 43%;
+    }
+}
+
 
 .vbox iframe {
     position: absolute;
