@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 
 class LinkForm(forms.Form):
-    link = forms.CharField(widget=forms.Textarea(attrs={'cols': 85, 'rows': 1}), required=True)
+    link = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 1}), required=True)
 
     # def clean(self):
     #     data = self.cleaned_data['link']

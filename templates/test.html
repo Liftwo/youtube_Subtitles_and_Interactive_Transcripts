@@ -1,89 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ video_collect.video_title }}
+{% endblock title %}
+{% block content %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<head>
-    <meta charset="UTF-8">
-    <script src="node_modules/jquery/src/jquery.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="shortcut icon" href="{% static "img/icon_kiki.ico" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
-{#    <link rel="stylesheet" type="text/css" href="{% static 'css/collect.css' %}">#}
-    <title>
-        {% block title %}
-        {% endblock title %}
-    </title>
-
-    <script>
-            let clicks = 0;
-            let like_count = 0
-            let d = {likes:0}
-            $(document).ready(function (){
-                let like_count = document.getElementById("like_total").innerText;
-
-                $('.for_test').text(like_count);
-            });
-            $(document).ready(function (){
-            $('.btn-link').click(function() {
-                let like_count = document.getElementById("like_total").innerText;
-                $.ajax({
-                    type:"POST",
-
-                    success: function (){
-                        if (clicks == 0){
-                        $("img").attr("src", "{% static "img/tag_pink.svg" %}");
-                        clicks++;
-                        let c = parseInt(like_count)+1;
-                        $('.like_total').text(c);
-                        let data = JSON.stringify({likes: c});
-
-                        }
-                        else{
-                        $("img").attr("src", "{% static "img/tag.svg" %}");
-                        clicks--;
-                        let c = parseInt(like_count)-1;
-                        $('.like_total').text(c);
-                        let d = JSON.stringify(like_count);
-                        }
-
-                        },
-                    data:document.getElementById("like_total").innerText,
-                    })
-            });})
-        </script>
-</head>
-<body>
-    <nav class="navbar navbar-expand navbar-custom">
-      <a class="navbar-brand" href="/">Like...</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/about">About <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/collect">Collect <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-
-        <button type="button" id="like_tag" class="btn btn-link"><img src="{% static "img/tag.svg" %}" id="like_tag" style="width:40px;height:50px" title="nice job!"></button>
-        <p class="for_test">0</p>
-        </form>
+{% load custom_tags %}
 
 
-      </div>
-    </nav>
-    {% block content %}
-    {% endblock %}
+<div class="container">
+    <br>
+    <div class="row mb-5">
+        <div class="col-1"></div>
+        <div class="col-10" align="center">
+            <div id="player"></div>
+            <link rel="stylesheet" type="text/css" href="{% static 'css/marker2.css' %}">
+            <div id="youtube-transcript-#1" class="youtube-transcript">
+                <span class="youtube-marker" id="sub-en" style="background-color:gray;color:gray">Ready~</span><br>
+                <span id="sub-ch">Ready~</span>
+                <script>
+                    alert("雙字幕同步率為{{ video_collect.rate }}");
+                    var subtitles = `{{ video_collect.json_dual|safe }}`;
+                    function UnescapeHTML(a) {
+                        a = "" + a;
+                        return a.replace(/&#39;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+                    }
+
+                    var tag = document.createElement('script');
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    var firstScriptTag = document.getElementsByTagName('script')[0];
+                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                    var player;
+                    var video_id = `{{ video_collect.video_id }}`;
+                    function onYouTubeIframeAPIReady() {
+                            player = new YT.Player('player', {
+                              height: '360',
+                              width: '840',
+                              videoId: video_id,
+                              events: {
+                                'onReady': onPlayerReady,
+                                'onStateChange': onPlayerStateChange,
+                              }
+                            });
+                          }
+
+                    function onPlayerReady(event) {
+                        event.target.mute().playVideo();
+                      }
+
+                    function onPlayerStateChange(event) {
+                      var Update;
+                      if (event.data == YT.PlayerState.PLAYING) {
+                        Update = setInterval(function() {
+                          ShowSubtitles()
+                        }, 100);
+                      } else {
+                        clearInterval(Update);
+                      };
+                      console.log(event.data)
+                    }
+
+                    function ShowSubtitles() {
+                          var current_time = player.getCurrentTime();
+                          console.log(current_time);
+                          subtitles.forEach(function(subtitle, i) {
+
+                            if (current_time >= subtitle.start && current_time <= subtitle.end) {
+                              document.getElementById("sub-ch").textContent=UnescapeHTML(subtitle.text_ch);
+                              document.getElementById("sub-en").textContent=UnescapeHTML(subtitle.text_en);
+                            }
+                          });
+                        };
+
+                    $("span").text()
+
+                    $(document).ready(function(event) {
+                            $("#sub-en").mouseenter(function () {
+                            $("#sub-en").css({"background":"", "color":""});
+                            player.pauseVideo();
+                            })
+                            $("#sub-en").mouseleave(function() {
+                            $("#sub-en").css({"background":"gray", "color":"gray"});
+                            player.playVideo();
+                            })
+                        });
+
+                    $("#player").css("text-align", "center");
+
+                </script>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+    <div class="text-center">
+        <a href="/"><button class="btn btn-light" type="button" style="font-family:'Chakra Petch', sans-serif" >Another Video~<i class="fas fa-plane"></i></button></a>
+    </div>
 
 
-</body>
-</html>
+</div>
+
+{% endblock %}
