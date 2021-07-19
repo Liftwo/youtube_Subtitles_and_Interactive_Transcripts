@@ -8,7 +8,6 @@ tcl
 db.sqlite3
 staticfiles
 bubble.py
-.gcloudignore
 views_back.py
 sitemaps.py
 base_back.html
