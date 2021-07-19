@@ -8,3 +8,27 @@ tcl
 db.sqlite3
 staticfiles
 bubble.py
+.gcloudignore
+views_back.py
+sitemaps.py
+base_back.html
+collect_2.html
+custom_sitemap.html
+fortest.html
+homepage_2.html
+homepage_3.html
+result2.html
+single_collect_test.html
+test.html
+test2.html
+test3.html
+s_single_collect.js
+s_upload.js
+sub.js
+test.js
+marker.css
+marker2.css
+test.css
+mediaelement
+node_modules
+googlede1e4f7f1c5fd465 (1)
