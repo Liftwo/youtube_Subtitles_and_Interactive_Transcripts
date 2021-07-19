@@ -8,6 +8,7 @@ tcl
 db.sqlite3
 staticfiles
 bubble.py
+
 views_back.py
 sitemaps.py
 base_back.html
@@ -31,3 +32,4 @@ static/css/test.css
 mediaelement
 node_modules
 googlede1e4f7f1c5fd465 (1)
+static
