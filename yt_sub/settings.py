@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,8 +90,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         # 'HOST': '/cloudsql/ytsub-312415:asia-east1:ytsub-db',
         'NAME': 'ytsub',
-        'USER': 'postgres',
-        'PASSWORD': 'tyla910ai', #修改為您的密碼
+        'USER': '*',
+        'PASSWORD': '*', #修改為您的密碼
         'PORT': '5432',
     }
 }
