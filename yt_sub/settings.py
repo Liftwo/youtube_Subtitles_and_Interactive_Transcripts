@@ -143,3 +143,5 @@ USE_TZ = True
 # STATIC_URL = 'https://storage.googleapis.com/ytsub/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_URL = '/static/'
+
+
