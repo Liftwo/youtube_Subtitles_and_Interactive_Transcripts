@@ -149,7 +149,7 @@ def quote(string):
 
 
 def video_title(video_id):
-    api_key = "AIzaSyCfR-UnJRc8KmI9Y2sBr68r2Q93C_DJiUM"
+    api_key = ""
     path = f"https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id={video_id}&key={api_key}"
     r = requests.get(path)
     data = r.json()
