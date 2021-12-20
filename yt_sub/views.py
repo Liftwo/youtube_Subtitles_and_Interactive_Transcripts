@@ -7,6 +7,7 @@ import json
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
 from visit.models import Visit, Like, Collect
+from youtube_transcript_api import YouTubeTranscriptApi
 
 
 class Upload:
@@ -17,14 +18,16 @@ class Upload:
             video_id = match.group(1)
         else:
             video_id = ""
-        lang_list_url = f"https://video.google.com/timedtext?type=list&v={video_id}"
+        api_key = "AIzaSyCfR-UnJRc8KmI9Y2sBr68r2Q93C_DJiUM"
+        lang_list_url = f"https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId={video_id}&key={api_key}"
         all_lang_code = []
         r = requests.get(lang_list_url)
-        lang_list_xml = et.fromstring(r.content)
-        for elem in lang_list_xml:
-            all_lang_code.append(elem.attrib['lang_code'])
+        res = json.loads(r.content)
+        print('這裏先',res)
+        for i in res['items']:
+            all_lang_code.append(i['snippet']['language'])
         all_lang_code.extend([video_id])
-
+        print('這裏', all_lang_code)
         return all_lang_code  # id在list的最後
 
     def subtitles_xml(self, link):
@@ -47,26 +50,23 @@ class Upload:
             else:
                 continue
 
-        subtitles_url = []
-        subtitles_url.extend([f"http://www.youtube.com/api/timedtext?v={video_id}&lang={zh_sub}",
-                              f"http://www.youtube.com/api/timedtext?v={video_id}&lang={all_en_sub[0]}"])
+        return video_id, zh_sub, lang_code_list, filter_en  # id在前
 
-        id_and_url = [video_id]
-        id_and_url.append(subtitles_url)
-        return id_and_url, lang_code_list, filter_en  # id在前
-
-    def subtitles(self, xml):
+    def subtitles(self, videoid, language):
         start = []
         dur = []
         end = []
         sub = []
 
-        r = requests.get(xml)
-        video_xml = et.fromstring(r.content)
-        for elem in video_xml:  # loop all lines
-            start.append(float(elem.attrib['start']))
-            dur.append(float(elem.attrib['dur']))
-            sub.append(elem.text.replace('\n', ' '))
+        try:
+            srt = YouTubeTranscriptApi.get_transcript(videoid, languages=[language])
+        except:
+            reminder = "Error"
+            return reminder
+        for elem in srt:  # loop all lines
+            start.append(float(elem['start']))
+            dur.append(float(elem['duration']))
+            sub.append(elem['text'].replace('\n', ' '))
 
         for i, j in zip(start, dur):
             end.append(i + j)
@@ -85,8 +85,8 @@ class Upload:
         return sub_and_rate
 
     def main(self, link):
-        zh_sub = self.subtitles(self.subtitles_xml(link)[0][1][0])
-        en_sub = self.subtitles(self.subtitles_xml(link)[0][1][1])
+        en_sub = self.subtitles(self.subtitles_xml(link)[0], "en")
+        zh_sub = self.subtitles(self.subtitles_xml(link)[0], self.subtitles_xml(link)[1])
         return self.combine_sub(en_sub, zh_sub)
 
     def video_title(self, video_id):
@@ -136,10 +136,13 @@ def homepage(request):
         if form.is_valid():
             link = request.POST['link']
             try:
-                video_id = yt.subtitles_xml(link)[0][0]
+                print('測試')
+                print(yt.subtitles_xml(link))
+                video_id = yt.subtitles_xml(link)[0]
                 request.session['link'] = link
                 return redirect('upload', video_id=video_id)
             except:
+                print(yt.subtitles_xml(link))
                 return render(request, 'linkerror.html')
 
     form = LinkForm()
@@ -155,11 +158,10 @@ def quote(string):
 
 def upload(request, video_id):
     link = request.session.get('link')
-    r = requests.get(yt.subtitles_xml(link)[0][1][1]) #en
-    yt_video_id = yt.subtitles_xml(link)[0][0]
     code_list = yt.subtitles_xml(link)[2]
     zh_list = yt.subtitles_xml(link)[1]
-    if "Error 404" in str(r.content) or yt_video_id == "": #代表影片遭刪除
+    language = "en"
+    if "Error" in yt.subtitles(video_id, language) or video_id == "": #代表影片遭刪除
         return render(request, 'linkerror.html')
     elif "en" not in code_list:
         check = code_list
@@ -171,7 +173,8 @@ def upload(request, video_id):
         if not match_result:
             return render(request, 'linkerror.html')
         else:
-            sub_dual = yt.main(link)
+            sub_dual = yt.\
+                main(link)
             json_dual = json.dumps(sub_dual[1])
             rate = '%d%%' % int(sub_dual[0]*100)
             video_id = video_id
