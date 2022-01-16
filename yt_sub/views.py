@@ -99,6 +99,7 @@ class Upload:
         return title
 
     def visitor_count(self, request):
+        request.session.set_expiry(60)
         if "like" not in request.session:
             request.session["like"] = True
             visit_model = Visit.objects.get(pk=1)
