@@ -43,7 +43,7 @@ class Upload:
 
         zh_sub_order = ["zh-TW", "zh-HK", "zh-Hans", "zh", "zh-CN", "zh-Hant"]
         zh_sub = ""
-        for i in range(0, 5):
+        for i in range(0, 6):
             if zh_sub_order[i] in all_zh_sub:
                 zh_sub = zh_sub_order[i]
                 break
