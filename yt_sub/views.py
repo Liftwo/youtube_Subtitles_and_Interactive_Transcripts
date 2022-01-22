@@ -41,7 +41,7 @@ class Upload:
             if en:
                 filter_en.append("en")
 
-        zh_sub_order = ["zh-TW", "zh-HK", "zh-Hans", "zh", "zh-CN"]
+        zh_sub_order = ["zh-TW", "zh-HK", "zh-Hans", "zh", "zh-CN", "zh-Hant"]
         zh_sub = ""
         for i in range(0, 5):
             if zh_sub_order[i] in all_zh_sub:
@@ -137,7 +137,6 @@ def homepage(request):
         if form.is_valid():
             link = request.POST['link']
             try:
-                print('測試')
                 print(yt.subtitles_xml(link))
                 video_id = yt.subtitles_xml(link)[0]
                 request.session['link'] = link
@@ -149,6 +148,7 @@ def homepage(request):
     form = LinkForm()
     visitor = yt.visitor_count(request)
     likes_total = yt.like_count(request)
+
     context = {'form': form, 'visitor': visitor, 'like_count': likes_total}
     return render(request, 'homepage.html', context)
 
@@ -209,10 +209,6 @@ def single_collect(request, pk):
 
 
 def test(request):
-    return render(request, 'test3.html')
-
-
-def test_2(request):
-    return render(request, 'test2.html')
+    return render(request, 'test.html')
 
 
