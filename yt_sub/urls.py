@@ -34,7 +34,8 @@ urlpatterns = [
     # path('test/', views.test),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('<int:pk>', views.single_collect),
-    # path('test', views.single_collect),
+    path('online_number/', views.test),
     # path('sitemap.xml', views.index, {'sitemaps':sitemaps, 'template_name':'custom_sitemap.html'}),
+    path('realtime/', views.realtime),
 
 ]

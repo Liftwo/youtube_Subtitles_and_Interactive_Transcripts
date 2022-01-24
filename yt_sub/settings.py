@@ -24,14 +24,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'gs*z1@07t9ri)r11v54z#y5xi-2(tmkc&4&z!t0=g58cji(c*9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '247a-1-165-103-97.ngrok.io', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,5 +144,16 @@ USE_TZ = True
 # STATIC_URL = 'https://storage.googleapis.com/ytsub/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_URL = '/static/'
+
+ASGI_APPLICATION = "yt_sub.routing.application"
+
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'GONFIG':{
+            "hosts":[('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
