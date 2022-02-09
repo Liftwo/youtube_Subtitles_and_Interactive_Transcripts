@@ -93,7 +93,7 @@ DATABASES = {
         # 'HOST': '/cloudsql/ytsub-312415:asia-east1:ytsub-db',
         'NAME': 'ytsub',
         'USER': 'postgres',
-        'PASSWORD': 'tyla910ai', #修改為您的密碼
+        'PASSWORD': '', #修改為您的密碼
         'PORT': '5432',
     }
 }
