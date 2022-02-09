@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,19 +27,19 @@ SECRET_KEY = 'gs*z1@07t9ri)r11v54z#y5xi-2(tmkc&4&z!t0=g58cji(c*9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '247a-1-165-103-97.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'visit',
     'django.contrib.sites',
     'django.contrib.sitemaps',
@@ -153,6 +154,28 @@ CHANNEL_LAYERS = {
         'GONFIG':{
             "hosts":[('127.0.0.1', 6379)],
         },
+    },
+}
+
+REDIS_SERVER = '127.0.0.1'
+port = '6379'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            "redis://" + REDIS_SERVER + ":" + port + "/0",
+        ],
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'PASSWORD': '',
+            'SOCKET_CONNECT_TIMEOUT': 100,
+            'SOCKET_TIMEOUT': 100,
+            'CONNECTION_POOL_KWARGS': {
+                'max_connections': 500
+            },
+            'REDIS_CLIENT_KWARGS': {'decode_responses':True},
+        }
     },
 }
 

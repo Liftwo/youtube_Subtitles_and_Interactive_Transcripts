@@ -208,11 +208,4 @@ def single_collect(request, pk):
     return render(request, 'single_collect.html', locals())
 
 
-def test(request):
-    return render(request, 'test.html')
-
-
-def realtime(request):
-    return render(request, 'realtime.html')
-
 

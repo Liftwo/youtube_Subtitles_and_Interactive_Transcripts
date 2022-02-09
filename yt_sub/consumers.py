@@ -104,40 +104,36 @@ class WSConsumer(WebsocketConsumer):
             sleep(1)
 
 
+
 class NumberOfOnline(AsyncWebsocketConsumer):
-    db = Redis(host='127.0.0.1', port=6379, db=0)
+    db = Redis(host='127.0.0.1', port=8000, db=0)
 
     async def connect(self):
         await self.accept()
-        print('登入')
-        await self.channel_layer.group_add('users', self.channel_name)
+        self.room_group_name = 'users'
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        redis_connect = get_redis_connection('default')
+        online_number = str(redis_connect.zcard("asgi:group:users"))
+        print('上線人數', online_number)
+        await self.channel_layer.group_send(self.room_group_name,{'type':'haha', 'message':online_number})
+
         user = self.scope['user']
-        print('登入', user)
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard('users', self.channel_name)
         user = self.scope['user']
         print('斷開', user)
+        redis_connect = get_redis_connection('default')
+        online_number = str(redis_connect.zcard("asgi:group:users"))
+        print('上線人數', online_number)
+        await self.channel_layer.group_send(self.room_group_name,{'type':'online', 'message':online_number})
 
-    async def redis_connect(self):
-        redis_connect = get_redis_connection()
-        value = redis_connect.get("asgi:group:users")
-        print(value)
-        await self.channel_layer.group_send(
-            'test',
-            {
-                'type': 'chat_message',
-                'message': 'test'
-            }
-        )
+    async def online(self, event):
+        message = event['message']
+        await self.send(text_data=json.dumps({
+            'message': message
+        }))
 
-
-class WSConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
-        for i in range(1000):
-            self.send(json.dumps({'message': randint(1, 100)}))
-            sleep(1)
 
 
 
