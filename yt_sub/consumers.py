@@ -115,9 +115,8 @@ class NumberOfOnline(AsyncWebsocketConsumer):
         redis_connect = get_redis_connection('default')
         online_number = str(redis_connect.zcard("asgi:group:users"))
         print('上線人數', online_number)
-        await self.channel_layer.group_send(self.room_group_name,{'type':'haha', 'message':online_number})
+        await self.channel_layer.group_send(self.room_group_name,{'type':'online', 'message':online_number})
 
-        user = self.scope['user']
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard('users', self.channel_name)
